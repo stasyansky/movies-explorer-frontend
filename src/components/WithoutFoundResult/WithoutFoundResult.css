@@ -1,0 +1,9 @@
+.noresult__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.noresult__title {
+    text-align: center;
+    color: #FFFFFF;
+}

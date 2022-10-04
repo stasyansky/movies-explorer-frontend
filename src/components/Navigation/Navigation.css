@@ -1,0 +1,55 @@
+.navigation__links {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 26px;
+}
+.navigation__links_desktop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.desktop__nav_links {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    margin-left: 70px;
+    gap: 16px;
+}
+.desktop__nav_link {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+.desktop__nav_link:hover {
+    font-weight: 500;
+}
+.navigation__link {
+    font-size: 10px;
+    font-weight: 500;
+    color: #fff;
+    text-decoration: none;
+    transition: opacity .3s linear;
+}
+.navigation__link:hover {
+    cursor: pointer;
+    opacity: .6;
+}
+.navigation__link_signin {
+    color: #000;
+    padding: 5px 12px;
+    background-color: #3DDC84;
+    width: 54px;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+.navigation__menu {
+    padding: 0;
+    border: none;
+    background: transparent url("../../images/menu.svg") no-repeat center center;
+    width: 40px;
+    height: 43px;
+}

@@ -1,0 +1,116 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+.login__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 56px auto 80px;
+}
+.login__title {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 1.2;
+    color: #FFFFFF;
+}
+.login__form {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    width: 260px;
+    gap: 20px;
+}
+.login__field {
+    display: flex;
+    flex-direction: column;
+}
+.login__label {
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 1.2;
+    color: #8B8B8B;
+    margin-bottom: 10px;
+}
+.login__input {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 1.2;
+    color: #FFFFFF;
+    padding: 15px;
+    background: #2F2F2F;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+}
+.login__input_error {
+    color: #EE3465;
+}
+.login__error {
+    margin: -10px 0 0;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 1.2;
+    color: #202020;
+}
+.login__error_visible {
+    color: #EE3465;
+}
+.login__form_btn {
+    width: 260px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 1.25;
+    text-align: center;
+    color: #FFFFFF;
+    background-color: #4285F4;
+    border-radius: 3px;
+    margin-top: 290px;
+    padding: 15px 0;
+}
+.login__footer {
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    margin: 14px auto 30px;
+}
+.login__footer_text {
+    margin: 0;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.25;
+    text-align: center;
+    color: #8B8B8B;
+}
+.login__footer_link {
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.25;
+    text-align: center;
+    color: #4285F4;
+}
+
+@media screen and (min-width: 768px) {
+    .login {
+        justify-content: center;
+    }
+    .login__header {
+        align-items: start;
+        margin-bottom: 40px;
+    }
+    .login__form {
+        width: 366px;
+    }
+    .login__form_btn {
+        margin: 139px auto 0;
+        width: 366px;
+    }
+}
+@media screen and (min-width: 1024px) {
+    .login__form {
+        width: 396px;
+    }
+}
