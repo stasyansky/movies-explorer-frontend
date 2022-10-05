@@ -19,9 +19,12 @@
     font-size: 14px;
     line-height: 1.4;
     color: #8B8B8B;
+    width: 80%;
     border: none;
-    width: 175px;
-    outline: none;
+}
+.search__input:focus {
+    border: 1px solid #3DDC84;
+    border-radius: 8px;
 }
 .search__btn {
     width: 80px;
@@ -32,6 +35,7 @@
     border: none;
     border-radius: 20px;
     box-sizing: border-box;
+    cursor: pointer;
 }
 .search__short {
     display: flex;

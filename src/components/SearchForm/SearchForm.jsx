@@ -8,7 +8,7 @@ const SearchForm = () => {
 
     return (
         <div className="search">
-            <div className="search__container">
+            <form className="search__container">
                 <input
                     type="text"
                     name="inputSearchMovie"
@@ -19,8 +19,8 @@ const SearchForm = () => {
                     required
                     autoComplete="off"
                 />
-                <button className="search__btn" type="button"></button>
-            </div>
+                <button className="search__btn" type="submit"></button>
+            </form>
             <div className="search__short">
                 <FilterCheckbox isOn={value} handleToggle={() => setValue(!value)} />
                 <p className="search__short_text">Короткометражки</p>

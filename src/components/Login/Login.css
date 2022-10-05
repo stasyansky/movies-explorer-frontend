@@ -69,6 +69,7 @@
     border-radius: 3px;
     margin-top: 290px;
     padding: 15px 0;
+    border: none;
 }
 .login__footer {
     display: flex;
