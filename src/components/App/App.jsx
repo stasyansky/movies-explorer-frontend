@@ -42,19 +42,22 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
         <div className="page">
             {pageWithHeader && <Header menuOpen={handleMenuOpen} desktop={desktop} />}
-            <Routes>
-                <Route path='/signin' element={<Login />} />
-                <Route path='/signup' element={<Register
-                    errorRegister={isErrorOnRegister}
-                    userName={name}
-                    setName={setName}
-                />} />
-                <Route path='/profile' element={<Profile userName={name} />} />
-                <Route path='/movies' element={<Movies />} />
-                <Route path='/saved-movies' element={<SavedMovies />} />
-                <Route path='/' element={<Main />} />
-                <Route path="*" element={<NotFoundPage />} />
-            </Routes>
+            <main>
+                <Routes>
+                    <Route path='/signin' element={<Login />} />
+                    <Route path='/signup' element={<Register
+                        errorRegister={isErrorOnRegister}
+                        userName={name}
+                        setName={setName}
+                    />} />
+                    <Route path='/profile' element={<Profile userName={name} />} />
+                    <Route path='/movies' element={<Movies />} />
+                    <Route path='/saved-movies' element={<SavedMovies />} />
+                    <Route path='/' element={<Main />} />
+                    <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+            </main>
+
             {pageWithFooter && <Footer/>}
 
             <MenuBurgerPopup
