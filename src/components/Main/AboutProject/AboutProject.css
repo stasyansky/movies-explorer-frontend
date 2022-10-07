@@ -1,0 +1,115 @@
+.about {
+    width: 284px;
+    margin: 0 auto 0;
+}
+.about__title {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+    color: #fff;
+    margin: 70px 0 0;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #dadada;
+}
+.about__subtitle {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+    color: #fff;
+    margin: 60px 0 0;
+}
+.about__text {
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 1.45;
+    color: #fff;
+    margin: 16px 0 0;
+}
+.about__grid {
+    display: grid;
+    grid-template-columns: 100px 184px;
+    text-align: center;
+    margin-top: 60px;
+}
+.about__grid_item {
+    margin: 0;
+    box-sizing: border-box;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.2;
+}
+.about__grid_item:nth-child(1) {
+    background-color: #3DDC84;
+    padding: 11px 10px;
+}
+.about__grid_item:nth-child(2) {
+    background-color: #303030;
+    padding: 11px 0;
+    color: #fff;
+}
+.about__grid_item:nth-last-of-type(-n+2) {
+    color: #A0A0A0;
+    padding: 11px 0 0;
+}
+
+@media screen and (max-width: 768px) {
+    .about {
+        width: calc(284px + 384 * ((100vw - 320px) / (768 - 320)));
+    }
+    .about__grid {
+        grid-template-columns: calc(100px + 40 * ((100vw - 320px) / (768 - 320))) calc(184px + 344 * ((100vw - 320px) / (768 - 320)));
+    }
+}
+@media screen and (min-width: 768px) {
+    .about__info {
+        display: flex;
+        gap: 30px;
+    }
+    .about__subtitle {
+        font-size: 20px;
+    }
+    .about__text {
+        font-size: 12px;
+        line-height: 1.5;
+        margin: 22px 0 0;
+    }
+    .about__grid {
+        margin-top: 93px;
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 1280px) {
+    .about {
+        width: calc(668px + 472 * ((100vw - 768px) / (1280 - 768)));
+        margin-bottom: 90px;
+    }
+    .about__title {
+        margin-top: 90px;
+    }
+    .about__grid {
+        grid-template-columns: calc(140px + 88 * ((100vw - 768px) / (1280 - 768))) calc(528px + 384 * ((100vw - 768px) / (1280 - 768)));
+    }
+}
+@media screen and (min-width: 1280px) {
+    .about {
+        width: 1140px;
+        margin-bottom: 110px;
+    }
+    .about__title {
+        margin-top: 110px;
+    }
+    .about__info {
+        gap: 40px;
+    }
+    .about__info_part {
+        flex-basis: 550px;
+    }
+    .about__text {
+        font-size: 14px;
+    }
+    .about__grid {
+        grid-template-columns: 228px 912px;
+        justify-content: center;
+    }
+}

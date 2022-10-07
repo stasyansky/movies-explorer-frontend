@@ -1,0 +1,124 @@
+.student {
+    margin: 136px auto 0;
+    width: 292px;
+}
+.student__title {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+    color: #fff;
+    margin: 0;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #dadada;
+}
+.student__img {
+    height: 352px;
+    border: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 60px;
+    object-fit: cover;
+    display: flex;
+    justify-content: center;
+}
+.student__name {
+    margin: 40px 0 0;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+    color: #fff;
+}
+.student__info,
+.student__prof{
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 1.45;
+    color: #fff;
+    margin: 20px 0 0;
+}
+.student__link {
+    display: block;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.2;
+    text-decoration: none;
+    color: #fff;
+    margin-top: 40px;
+}
+
+@media screen and (min-width: 768px) {
+    .student {
+        margin-top: 90px;
+    }
+    .student__container {
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 49px;
+        margin: 66px auto 0;
+        justify-content: space-between;
+    }
+    .student__img {
+        margin: 0;
+        height: 307px;
+    }
+    .student__biography {
+        width: 366px;
+    }
+    .student__title {
+        font-size: 22px;
+    }
+    .student__name {
+        font-size: 40px;
+        margin: 0;
+    }
+    .student__prof {
+        font-size: 12px;
+        margin-top: 16px;
+    }
+    .student__info {
+        font-size: 12px;
+        margin-top: 20px;
+    }
+}
+@media screen and (max-width: 768px) {
+    .student {
+        width: calc(292px + 376 * ((100vw - 320px) / (768 - 320)));
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 1280px) {
+    .student {
+        width: calc(668px + 472 * ((100vw - 768px) / (1280 - 768)));
+        margin-top: 110px;
+    }
+}
+@media screen and (min-width: 1024px) {
+    .student {
+        margin-top: 110px;
+    }
+    .student__biography {
+        width: 608px;
+    }
+    .student__img {
+        width: 270px;
+        height: 327px;
+    }
+    .student__name {
+        font-size: 50px;
+    }
+    .student__info {
+        font-size: 14px;
+    }
+    .student__prof {
+        font-size: 18px;
+    }
+    .student__link {
+        margin-top: 75px;
+    }
+}
+@media screen and (min-width: 1280px) {
+    .student {
+        width: 1140px;
+    }
+}
