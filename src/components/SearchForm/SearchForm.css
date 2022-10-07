@@ -35,6 +35,10 @@
     border: none;
     border-radius: 20px;
     box-sizing: border-box;
+    transition: opacity .3s linear;
+}
+.search__btn:hover {
+    opacity: .8;
     cursor: pointer;
 }
 .search__short {

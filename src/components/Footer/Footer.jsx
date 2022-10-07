@@ -3,7 +3,7 @@ import './Footer.css';
 
 const Footer = () => {
     return (
-        <div className="footer">
+        <footer className="footer">
             <h4 className="footer__subtitle">Учебный проект Яндекс.Практикум х BeatFilm.</h4>
             <div className="footer__container">
                 <div className="footer__nav">
@@ -12,7 +12,7 @@ const Footer = () => {
                 </div>
                 <p className="footer__copyright">&copy;2022</p>
             </div>
-        </div>
+        </footer>
     );
 };
 
