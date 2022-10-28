@@ -46,6 +46,8 @@
     color: #FFFFFF;
     background: inherit;
     border: none;
+    outline: none;
+    width: 50%;
 }
 .profile__form_btn {
     margin: 410px auto 0;

@@ -1,12 +1,13 @@
 import React from 'react';
 import './WithoutFoundResult.css';
-import Preloader from "../Preloader/Preloader";
 
-const WithoutFoundResult = () => {
+const WithoutFoundResult = ({ isErrorOnServer, errorServerText}) => {
     return (
         <div className="noresult__container">
-            <h2 className="noresult__title">Результатов не найдено</h2>
-            <Preloader />
+            {isErrorOnServer ?
+                <h2 className="noresult__title">{errorServerText}</h2>
+            :   <h2 className="noresult__title">Результатов не найдено</h2>
+            }
         </div>
     );
 };

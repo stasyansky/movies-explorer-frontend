@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import './Profile.css';
+import {CurrentUserContext} from "../../contexts/CurrentUserContext";
 
-const Profile = ({ userName }) => {
+const Profile = ({ handleSignOut, handleEditProfile, setCurrentUser }) => {
+
+    const currentUser = useContext(CurrentUserContext);
     const [name, setName] = useState('');
-    const [email, setEmail] = useState('pochta@yandex.ru');
+    const [email, setEmail] = useState('');
+
+    useEffect(() => {
+        setCurrentUser(JSON.parse(localStorage.getItem('userData')));
+    },[]);
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        handleEditProfile({name, email});
+    }
 
     return (
         <section className="profile">
             <div className="profile__container">
-                <h2 className="profile__greeting">Привет, {userName}</h2>
-                <form className="profile__form">
+                <h2 className="profile__greeting">Привет, {currentUser.name}</h2>
+                <form className="profile__form" onSubmit={handleSubmit}>
                     <div className="profile__field">
                         <label htmlFor="username" className="profile__label">Имя</label>
                         <input
@@ -17,7 +29,7 @@ const Profile = ({ userName }) => {
                             id="username"
                             name="inputName"
                             className="profile__input"
-                            placeholder=""
+                            placeholder={currentUser.name}
                             value={name}
                             onChange={e => setName(e.target.value)}
                             required
@@ -31,7 +43,7 @@ const Profile = ({ userName }) => {
                             id="usermail"
                             name="inputEmail"
                             className="profile__input"
-                            placeholder={email}
+                            placeholder={currentUser.email}
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             required
@@ -43,7 +55,7 @@ const Profile = ({ userName }) => {
                     </button>
                 </form>
                 <div className="profile__footer">
-                    <button className="profile__btn" type="button">
+                    <button className="profile__btn" type="button" onClick={handleSignOut}>
                         Выйти из аккаунта
                     </button>
                 </div>

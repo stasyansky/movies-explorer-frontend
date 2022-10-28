@@ -1,41 +1,79 @@
-import React, { useState } from 'react';
-import './MoviesCard.css';
+import React from 'react';
 import { useLocation } from "react-router-dom";
-import moviePicPath from '../../images/movies/movie_pic1.png';
+import './MoviesCard.css';
 
-const MoviesCard = ({ movie }) => {
-    const [isLiked, setIsLiked] = useState(false);
-    const handleLikeClick = () => {
-        setIsLiked(!isLiked);
-    }
+const MoviesCard = ({
+    movie,
+    savedMovie,
+    onMovieSaved,
+    onMovieDelete,
+    isSaved,
+}) => {
+
     const location = useLocation();
-    const pageMovies = location.pathname === '/movies';
+    const handleToggleSaveMovie = () => {
+        isSaved ? onMovieDelete(movie) : onMovieSaved(movie);
+    }
+    const handleDeleteClick = () => {
+        onMovieDelete(savedMovie);
+    }
+    const setMovieDuration = (duration) => {
+      if (duration < 60) {
+          return `${duration}м`;
+      } else if (duration == 60) {
+            return '1ч';
+        } else {
+          return `${Math.trunc(duration / 60)}ч${duration % 60}м`
+      }
+    }
 
     return (
         <li className="movie__item">
-            <img
-                className="movie__pic"
-                src={moviePicPath}
-                alt={movie.title}
-            />
+            <a href={(location.pathname === '/movies') ?
+                movie.trailerLink
+                : savedMovie.trailerLink}
+               target="_blank"
+               rel="noreferrer"
+            >
+                <img
+                    className="movie__pic"
+                    src={(location.pathname === '/movies') ?
+                        `https://api.nomoreparties.co/${movie.image.url}`
+                        : savedMovie.image
+                    }
+                    alt={(location.pathname === '/movies') ?
+                        movie.nameRU
+                        : savedMovie.nameRU}
+                />
+            </a>
             <div className="movie__caption">
                 <div className="movie__description">
-                    <h3 className="movie__text">{movie.title}</h3>
-                    <p className="movie_duration">{`${Math.trunc(movie.duration / 60)}ч${movie.duration % 60}м`}</p>
+                    <h3 className="movie__text">{
+                        (location.pathname === '/movies') ?
+                        movie.nameRU
+                        : savedMovie.nameRU}
+                    </h3>
+                    <p className="movie_duration">{
+                        (location.pathname === '/movies') ?
+                            setMovieDuration(movie.duration) :
+                            setMovieDuration(savedMovie.duration)
+                    }
+                    </p>
                 </div>
                 {
-                    pageMovies ?
+                    location.pathname === '/movies' ?
                         <button
                             type="button"
-                            className={`movie__like ${isLiked ? 'movie__like_active' : ''}`}
-                            aria-label="Поставить лайк"
-                            onClick={handleLikeClick}>
+                            className={`movie__like ${isSaved ? 'movie__like_active' : ''}`}
+                            aria-label="Сохранить фильм"
+                            onClick={handleToggleSaveMovie}>
                         </button>
                     :
                         <button
                             type="button"
                             className="movie__like_saved"
-                            aria-label="Удалить фильм">
+                            aria-label="Удалить фильм"
+                            onClick={handleDeleteClick}>
                         </button>
                 }
             </div>

@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import './Login.css';
 import LogoNav from "../LogoNav/LogoNav";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const Login = ({ errorLogin }) => {
-    const [email, setEmail] = useState('pochta@yandex.ru');
+const Login = ({ errorLogin, handleSignIn }) => {
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
 
     function handleSubmit(e) {
         e.preventDefault();
-        setEmail('');
-        setPassword('');
-        navigate('/movies', { replace: true });
+        handleSignIn({
+            email,
+            password,
+        });
     }
 
     return (
@@ -30,7 +30,7 @@ const Login = ({ errorLogin }) => {
                             id="useremail"
                             name="inputEmail"
                             className={`login__input ${errorLogin ? "login__input_error" : ""}`}
-                            placeholder={email}
+                            placeholder="Введите email"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             required
@@ -44,7 +44,7 @@ const Login = ({ errorLogin }) => {
                             id="userpass"
                             name="inputPass"
                             className={`login__input ${errorLogin ? "login__input_error" : ""}`}
-                            placeholder=""
+                            placeholder="Введите пароль"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             required

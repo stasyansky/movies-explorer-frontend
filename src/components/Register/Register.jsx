@@ -3,10 +3,22 @@ import './Register.css';
 import LogoNav from "../LogoNav/LogoNav";
 import { Link } from "react-router-dom";
 
-const Register = ({ userName, errorRegister, setName }) => {
+const Register = ({ errorRegister, handleSignUp }) => {
 
-    const [email, setEmail] = useState('pochta@yandex.ru');
-    const [password, setPassword] = useState('0000000000');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        handleSignUp({
+            name,
+            email,
+            password,
+        });
+        setEmail('');
+        setPassword('');
+    }
 
     return (
         <section className="register">
@@ -15,7 +27,7 @@ const Register = ({ userName, errorRegister, setName }) => {
                     <LogoNav />
                     <p className="register__title">Добро пожаловать!</p>
                 </div>
-                <form className="register__form">
+                <form className="register__form" onSubmit={handleSubmit}>
                     <div className="register__field">
                         <label htmlFor="username" className="register__label">Имя</label>
                         <input
@@ -23,8 +35,8 @@ const Register = ({ userName, errorRegister, setName }) => {
                             id="username"
                             name="inputName"
                             className="register__input"
-                            placeholder={userName}
-                            value={userName}
+                            placeholder="Введите имя"
+                            value={name}
                             onChange={e => setName(e.target.value)}
                             required
                             autoComplete="off"
@@ -37,7 +49,7 @@ const Register = ({ userName, errorRegister, setName }) => {
                             id="useremail"
                             name="inputEmail"
                             className="register__input"
-                            placeholder={email}
+                            placeholder="Введите email"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             required
@@ -50,15 +62,15 @@ const Register = ({ userName, errorRegister, setName }) => {
                             type="password"
                             id="userpass"
                             name="inputPass"
-                            className={`register__input ${!errorRegister ? "register__input_error" : ""}`}
-                            placeholder={password}
+                            className={`register__input ${errorRegister ? "register__input_error" : ""}`}
+                            placeholder="Введите пароль"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             required
                             autoComplete="off"
                         />
                     </div>
-                    <p className={`register__error ${!errorRegister ? "register__error_visible" : ""}`}>Что-то пошло не так...</p>
+                    <p className={`register__error ${errorRegister ? "register__error_visible" : ""}`}>Что-то пошло не так...</p>
                     <button className="register__form_btn" type="submit">
                         Зарегистрироваться
                     </button>
