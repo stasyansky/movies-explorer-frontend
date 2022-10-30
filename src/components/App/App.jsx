@@ -7,7 +7,13 @@ import './App.css';
 import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
 import * as auth from '../../utils/auth';
-import * as constants from '../../utils/constants';
+import {
+    MOBILE_MAX_COUNT,
+    TABLET_MIN_COUNT,
+    TABLET_MAX_COUNT,
+    DESCTOP_MAX_COUNT,
+    SHORTMOVIE
+} from '../../utils/constants';
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
@@ -28,6 +34,7 @@ function App() {
     const [errorLogin, setErrorLogin] = useState(false);
     const [currentUser, setCurrentUser] = useState({});
     const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
+    const [isEditSuccess, setIsEditSuccess] = useState(false);
     const [isErrorOnRegister, setIsErrorOnRegister] = useState(false);
     const [isErrorOnServer, setIsErrorOnServer] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -49,6 +56,9 @@ function App() {
     const [searchQuery, setSearchQuery] = useState(
         {searchQueryOnMovies: '', searchQueryOnSavedMovies: ''}
     );
+    const [filmsOnRow, setFilmsOnRow] = useState(4);
+    const [countAddRows, setCountAddRows] = useState(4);
+
     const location = useLocation();
     const navigate = useNavigate();
     const [currentUrl, setCurrentUrl] = useState('');
@@ -112,12 +122,46 @@ function App() {
         }
     }, [navigate]);
 
+    useEffect(() => {
+        if (location.pathname === '/movies' || location.pathname === '/saved-movies') {
+            if (windowSize.width >= 1280) {
+                setFilmsOnRow(DESCTOP_MAX_COUNT);
+                setCountAddRows(4);
+            } else if (windowSize.width >= 1024 && windowSize.width < 1280) {
+            setFilmsOnRow(TABLET_MAX_COUNT);
+            setCountAddRows(3);
+            } else if (windowSize.width >= 672 && windowSize.width < 1024) {
+                setFilmsOnRow(TABLET_MIN_COUNT);
+                setCountAddRows(4);
+            } else {
+                setFilmsOnRow(MOBILE_MAX_COUNT);
+                setCountAddRows(5);
+            }
+        }
+    }, [windowSize.width]);
+
     const handleMenuOpen = () => {
         setIsBurgerMenuOpen(true);
     }
 
     const handleMenuClose = () => {
         setIsBurgerMenuOpen(false);
+    }
+
+    const popupSuccessClose = () => {
+        setIsEditSuccess(false);
+    }
+
+    function handleMoreFilmsClick() {
+        if (windowSize.width >= 1280) {
+            setCountAddRows(countAddRows + 1);
+        } else if (windowSize.width >= 1024 && windowSize.width < 1280) {
+            setCountAddRows(countAddRows + 1);
+        } else if (windowSize.width >= 672 && windowSize.width < 1024) {
+            setCountAddRows(countAddRows + 1);
+        } else {
+            setCountAddRows(countAddRows + 2);
+        }
     }
 
     function handleSignIn({email, password}) {
@@ -165,6 +209,7 @@ function App() {
             .then((userInfo) => {
                 setCurrentUser(userInfo);
                 localStorage.setItem('userData', JSON.stringify(userInfo));
+                setIsEditSuccess(true);
             })
             .catch((err) => console.error(err));
     }
@@ -172,9 +217,9 @@ function App() {
     function filterSearchedMovies(checkedCheckbox, movies, query, path) {
         if (checkedCheckbox) {
             const searchMovies = movies.filter(item => {
-                return (item.nameRU.toLowerCase().includes(query.toLowerCase()) && item.duration <= constants.SHORTMOVIE)
+                return (item.nameRU.toLowerCase().includes(query.toLowerCase()) && item.duration <= SHORTMOVIE)
                     ||
-                    (item.nameEN.toLowerCase().includes(query.toLowerCase()) && item.duration <= constants.SHORTMOVIE);
+                    (item.nameEN.toLowerCase().includes(query.toLowerCase()) && item.duration <= SHORTMOVIE);
             });
             path === 'movies' ? setSearchedMovies(searchMovies) : setSearchedSavedMovies(searchMovies);
             localStorage.setItem(`searchedMovies-${path}`, JSON.stringify(searchMovies) || []);
@@ -295,10 +340,16 @@ function App() {
                     <Route element={<ProtectedRoute isLogin={loggedIn} />}>
                         <Route path='profile' element={<Profile
                             handleSignOut={handleSignOut}
+                            isEditSuccess={isEditSuccess}
+                            onClose={popupSuccessClose}
+                            setIsEditSuccess={setIsEditSuccess}
                             handleEditProfile={handleEditProfile}
                             setCurrentUser={setCurrentUser} />}
                         />
                         <Route path='movies' element={<Movies
+                            filmsOnRow={filmsOnRow}
+                            countAddRows={countAddRows}
+                            handleMoreFilmsClick={handleMoreFilmsClick}
                             handleSearchMovies={handleSearchMovies}
                             onMovieSaved={handleMovieSaved}
                             onMovieDelete={handleMovieDelete}
@@ -315,6 +366,9 @@ function App() {
                             isErrorOnServer={isErrorOnServer} />}
                         />
                         <Route path='saved-movies' element={<SavedMovies
+                            filmsOnRow={filmsOnRow}
+                            countAddRows={countAddRows}
+                            handleMoreFilmsClick={handleMoreFilmsClick}
                             handleSearchSavedMovies={handleSearchSavedMovies}
                             onMovieDelete={handleMovieDelete}
                             savedMovies={savedMovies}
@@ -327,15 +381,14 @@ function App() {
                             searchQuery={searchQuery}
                             setSearchQuery={setSearchQuery}
                             errorPlaceholder={errorPlaceholder}
-                            setErrorPlaceholder={setErrorPlaceholder} />}
+                            setErrorPlaceholder={setErrorPlaceholder}
+                            isErrorOnServer={isErrorOnServer} />}
                         />
                     </Route>
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </main>
-
             {pageWithFooter && <Footer/>}
-
             <MenuBurgerPopup
                 isOpen={isBurgerMenuOpen}
                 onClose={handleMenuClose}

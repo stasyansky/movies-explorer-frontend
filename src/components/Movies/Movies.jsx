@@ -5,7 +5,6 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import MoreFilmsButton from "../MoreFilmsButton/MoreFilmsButton";
 import WithoutFoundResult from "../WithoutFoundResult/WithoutFoundResult";
 import Preloader from "../Preloader/Preloader";
-import {ERROR_SERVER_TEXT} from "../../utils/constants";
 
 const Movies = ({
     handleSearchMovies,
@@ -21,13 +20,11 @@ const Movies = ({
     setSearchQuery,
     errorPlaceholder,
     setErrorPlaceholder,
-    isErrorOnServer
+    isErrorOnServer,
+    filmsOnRow,
+    countAddRows,
+    handleMoreFilmsClick,
 }) => {
-
-    // useEffect(() => {
-    //     const searchedMoviesArr = JSON.parse(localStorage.getItem("searchedMovies-movies"));
-    //     searchedMoviesArr && setSearchedMovies(searchedMoviesArr);
-    // }, []);
 
     return (
         <section className="movies">
@@ -41,26 +38,22 @@ const Movies = ({
                 errorPlaceholder={errorPlaceholder}
                 setErrorPlaceholder={setErrorPlaceholder}
             />
+            {isErrorOnServer && <WithoutFoundResult isErrorOnServer={isErrorOnServer} />}
             {
-                isErrorOnServer &&
-                <WithoutFoundResult
-                    errorServerText={ERROR_SERVER_TEXT}
-                    isErrorOnServer={isErrorOnServer}
-                />
-            }
-            {
-                searchedMovies.length === 0 && !isErrorOnServer ?
-                <WithoutFoundResult />
-                :
-                <>
+                (searchedMovies.length === 0 && !isErrorOnServer)
+                ? <WithoutFoundResult />
+                : <>
                     <MoviesCardList
                         searchedMovies={searchedMovies}
                         onMovieSaved={onMovieSaved}
                         onMovieDelete={onMovieDelete}
                         savedMovies={savedMovies}
+                        filmsOnRow={filmsOnRow}
+                        countAddRows={countAddRows}
                     />
-                    {!isErrorOnServer && <MoreFilmsButton />}
-                </>
+                    {filmsOnRow * countAddRows < searchedMovies.length
+                        && <MoreFilmsButton handleMoreFilmsClick={handleMoreFilmsClick}/>}
+                  </>
             }
             {
                 isLoading && <Preloader />

@@ -20,7 +20,7 @@ const MoviesCard = ({
     const setMovieDuration = (duration) => {
       if (duration < 60) {
           return `${duration}м`;
-      } else if (duration == 60) {
+      } else if (duration === 60) {
             return '1ч';
         } else {
           return `${Math.trunc(duration / 60)}ч${duration % 60}м`

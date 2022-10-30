@@ -1,18 +1,31 @@
-import React, { useState } from 'react';
-import './Login.css';
-import LogoNav from "../LogoNav/LogoNav";
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { Link } from "react-router-dom";
+import LogoNav from "../LogoNav/LogoNav";
+import './Login.css';
 
 const Login = ({ errorLogin, handleSignIn }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
-    function handleSubmit(e) {
-        e.preventDefault();
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors, isValid },
+    } = useForm({
+        mode: "onChange",
+        defaultValues: {
+            email: '',
+            password: ''
+        }
+    });
+
+    const onSubmit = (data) => {
+        const { email, password } = data;
         handleSignIn({
             email,
             password,
         });
+        reset();
     }
 
     return (
@@ -22,37 +35,42 @@ const Login = ({ errorLogin, handleSignIn }) => {
                     <LogoNav />
                     <p className="login__title">Рады видеть!</p>
                 </div>
-                <form className="login__form" onSubmit={handleSubmit}>
+                <form className="login__form" onSubmit={handleSubmit(onSubmit)}>
                     <div className="login__field">
                         <label htmlFor="useremail" className="login__label">E-mail</label>
                         <input
                             type="email"
                             id="useremail"
-                            name="inputEmail"
                             className={`login__input ${errorLogin ? "login__input_error" : ""}`}
                             placeholder="Введите email"
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                            required
-                            autoComplete="off"
+                            {...register("email", {
+                                required: "Поле не должно быть пустым",
+                                pattern: {
+                                    value: /^([A-Za-z0-9\._]+)@([A-Za-z0-9])+.([a-z]+)(.[a-z]+)?$/,
+                                    message: 'Введите корректный email'
+                                }
+                            })}
                         />
+                        {errors?.email
+                            && <p className="profile__input_error">
+                                {errors?.email?.message || "Введите корректный email"}
+                            </p>
+                        }
                     </div>
                     <div className="login__field">
                         <label htmlFor="userpass" className="login__label">Пароль</label>
                         <input
                             type="password"
                             id="userpass"
-                            name="inputPass"
                             className={`login__input ${errorLogin ? "login__input_error" : ""}`}
                             placeholder="Введите пароль"
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
-                            required
-                            autoComplete="off"
+                            {...register("password", {
+                                required: "Поле не должно быть пустым",
+                            })}
                         />
                     </div>
                     <p className={`login__error ${errorLogin ? "login__error_visible" : ""}`}>Что-то пошло не так...</p>
-                    <button className="login__form_btn" type="submit">
+                    <button className="login__form_btn" type="submit" disabled={!isValid}>
                         Войти
                     </button>
                 </form>

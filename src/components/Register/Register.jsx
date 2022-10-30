@@ -1,23 +1,32 @@
-import React, { useState } from 'react';
-import './Register.css';
-import LogoNav from "../LogoNav/LogoNav";
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { Link } from "react-router-dom";
+import LogoNav from "../LogoNav/LogoNav";
+import './Register.css';
 
 const Register = ({ errorRegister, handleSignUp }) => {
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors, isValid },
+    } = useForm({
+        mode: "onChange",
+        defaultValues: {
+            name: '',
+            email: ''
+        }
+    });
 
-    function handleSubmit(e) {
-        e.preventDefault();
+    const onSubmit = (data) => {
+        const { name, email, password } = data;
         handleSignUp({
             name,
             email,
             password,
         });
-        setEmail('');
-        setPassword('');
+        reset();
     }
 
     return (
@@ -27,51 +36,69 @@ const Register = ({ errorRegister, handleSignUp }) => {
                     <LogoNav />
                     <p className="register__title">Добро пожаловать!</p>
                 </div>
-                <form className="register__form" onSubmit={handleSubmit}>
+                <form className="register__form" onSubmit={handleSubmit(onSubmit)}>
                     <div className="register__field">
                         <label htmlFor="username" className="register__label">Имя</label>
                         <input
                             type="text"
                             id="username"
-                            name="inputName"
                             className="register__input"
                             placeholder="Введите имя"
-                            value={name}
-                            onChange={e => setName(e.target.value)}
-                            required
-                            autoComplete="off"
+                            {...register("name", {
+                                required: "Поле не должно быть пустым",
+                                minLength: {
+                                    value: 2,
+                                    message: "Минимум 2 символа"
+                                },
+                                pattern: {
+                                    value: /[A-Za-zА-Яа-яЁё\s-]+/,
+                                    message: 'Введите корректное имя'
+                                }
+                            })}
                         />
+                        {errors?.name
+                            && <p className="input__error_validation">
+                                {errors?.name?.message || "Введите корректное имя"}
+                            </p>
+                        }
                     </div>
+
                     <div className="register__field">
                         <label htmlFor="useremail" className="register__label">E-mail</label>
                         <input
                             type="email"
                             id="useremail"
-                            name="inputEmail"
                             className="register__input"
                             placeholder="Введите email"
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                            required
-                            autoComplete="off"
+                            {...register("email", {
+                                required: "Поле не должно быть пустым",
+                                pattern: {
+                                    value: /^([A-Za-z0-9\._]+)@([A-Za-z0-9])+.([a-z]+)(.[a-z]+)?$/,
+                                    message: 'Введите корректный email'
+                                }
+                            })}
                         />
+                        {errors?.email
+                            && <p className="profile__input_error">
+                                {errors?.email?.message || "Введите корректный email"}
+                            </p>
+                        }
                     </div>
+
                     <div className="register__field">
                         <label htmlFor="userpass" className="register__label">Пароль</label>
                         <input
                             type="password"
                             id="userpass"
-                            name="inputPass"
                             className={`register__input ${errorRegister ? "register__input_error" : ""}`}
                             placeholder="Введите пароль"
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
-                            required
-                            autoComplete="off"
+                            {...register("password", {
+                                required: "Поле не должно быть пустым",
+                            })}
                         />
                     </div>
                     <p className={`register__error ${errorRegister ? "register__error_visible" : ""}`}>Что-то пошло не так...</p>
-                    <button className="register__form_btn" type="submit">
+                    <button className="register__form_btn" type="submit" disabled={!isValid}>
                         Зарегистрироваться
                     </button>
                 </form>

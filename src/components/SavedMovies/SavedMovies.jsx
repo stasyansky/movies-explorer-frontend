@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 import './SavedMovies.css';
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
@@ -19,14 +19,18 @@ const SavedMovies = ({
     searchQuery,
     setSearchQuery,
     errorPlaceholder,
-    setErrorPlaceholder
+    setErrorPlaceholder,
+    isErrorOnServer,
+    filmsOnRow,
+    countAddRows,
+    handleMoreFilmsClick,
 }) => {
 
     useEffect(() => {
         const savedMoviesArr = JSON.parse(localStorage.getItem('savedMovies'));
         const searchedSavedMoviesArr = JSON.parse(localStorage.getItem('searchedMovies-savedmovies'));
         if (searchedSavedMoviesArr) {
-            if (searchedSavedMoviesArr.length == 0) {
+            if (searchedSavedMoviesArr.length === 0) {
                 return setSearchedSavedMovies(savedMoviesArr);
             } else {
                 return setSearchedSavedMovies(searchedSavedMoviesArr)
@@ -52,17 +56,22 @@ const SavedMovies = ({
                 errorPlaceholder={errorPlaceholder}
                 setErrorPlaceholder={setErrorPlaceholder}
             />
-            {searchedSavedMovies.length === 0 ?
-                <WithoutFoundResult />
-                :
-                <>
+            {isErrorOnServer && <WithoutFoundResult isErrorOnServer={isErrorOnServer} />}
+            {
+                (searchedSavedMovies.length === 0 && !isErrorOnServer)
+                ? <WithoutFoundResult />
+                : <>
                     <MoviesCardList
                         searchedSavedMovies={searchedSavedMovies}
                         onMovieDelete={onMovieDelete}
                         savedMovies={savedMovies}
+                        filmsOnRow={filmsOnRow}
+                        countAddRows={countAddRows}
                     />
-                    <MoreFilmsButton />
-                </>
+                    {filmsOnRow * countAddRows < searchedSavedMovies.length
+                        && <MoreFilmsButton handleMoreFilmsClick={handleMoreFilmsClick}/>
+                    }
+                  </>
             }
             {
                 isLoading && <Preloader />
