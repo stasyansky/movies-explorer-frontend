@@ -1,11 +1,11 @@
 import React from 'react';
 import './SuccessPopup.css';
 
-const SuccessPopup = ({isOpen, onClose}) => {
+const SuccessPopup = ({isEditSuccess, onClose, successText, errorText, isErrorPostMovie}) => {
     return (
         <div
             tabIndex="-1"
-            className={`popup popup_type_tooltip ${isOpen ? "popup_opened" : ''}`}
+            className={`popup popup_type_tooltip ${isEditSuccess ? "popup_opened" : ''}`}
             onClick={onClose}
         >
             <div className="popup__tooltip" onClick={event => event.stopPropagation()}>
@@ -17,7 +17,8 @@ const SuccessPopup = ({isOpen, onClose}) => {
                 >
                 </button>
                 <h2 className="popup__tooltip_text">
-                    Данные пользователя обновлены!
+                    {isEditSuccess && successText}
+                    {isErrorPostMovie && errorText}
                 </h2>
             </div>
         </div>

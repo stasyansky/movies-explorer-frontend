@@ -35,6 +35,7 @@ function App() {
     const [currentUser, setCurrentUser] = useState({});
     const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
     const [isEditSuccess, setIsEditSuccess] = useState(false);
+    const [isErrorPostMovie, setIsErrorPostMovie] = useState(false);
     const [isErrorOnRegister, setIsErrorOnRegister] = useState(false);
     const [isErrorOnServer, setIsErrorOnServer] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +62,6 @@ function App() {
 
     const location = useLocation();
     const navigate = useNavigate();
-    const [currentUrl, setCurrentUrl] = useState('');
     const routesWithFooter = ['/', '/movies', '/saved-movies'];
     const pageWithFooter = routesWithFooter.includes(location.pathname);
     const routesWithHeader = ['/', '/movies', '/saved-movies', '/profile'];
@@ -91,22 +91,19 @@ function App() {
     }, [loggedIn, navigate]);
 
     useEffect(() => {
-        setCurrentUrl(location.pathname);
-        localStorage.setItem("currentUrl", currentUrl);
-    },[navigate]);
-
-    useEffect(() => {
         const token = localStorage.getItem('jwt');
         auth.checkToken(token)
             .then(() => {
                 mainApi.setNewToken();
                 setLoggedIn(true);
                 if(routesWithoutAuth.includes(location.pathname)) {
-                    navigate(currentUrl);
+                    navigate('/movies');
+                } else {
+                    navigate(location.pathname);
                 }
             })
             .catch(err => console.error(err));
-    },[navigate]);
+    },[]);
 
     useEffect(() => {
         if(loggedIn && !isFirstLogin) {
@@ -150,6 +147,7 @@ function App() {
 
     const popupSuccessClose = () => {
         setIsEditSuccess(false);
+        setIsErrorPostMovie(false);
     }
 
     function handleMoreFilmsClick() {
@@ -307,7 +305,10 @@ function App() {
                     setSavedMovies([...savedMovies, savedMovie]);
                 });
             })
-            .catch((err) => console.error(err));
+            .catch((err) => {
+                console.error(err);
+                setIsErrorPostMovie(true);
+            });
     }
 
     function handleMovieDelete(movieToDelete) {
@@ -363,7 +364,9 @@ function App() {
                             setSearchQuery={setSearchQuery}
                             errorPlaceholder={errorPlaceholder}
                             setErrorPlaceholder={setErrorPlaceholder}
-                            isErrorOnServer={isErrorOnServer} />}
+                            isErrorOnServer={isErrorOnServer}
+                            isErrorPostMovie={isErrorPostMovie}
+                            onClose={popupSuccessClose}/>}
                         />
                         <Route path='saved-movies' element={<SavedMovies
                             filmsOnRow={filmsOnRow}

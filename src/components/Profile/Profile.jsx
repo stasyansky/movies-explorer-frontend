@@ -95,7 +95,12 @@ const Profile = ({
                     </button>
                 </div>
             </div>
-            {isEditSuccess && <SuccessPopup isOpen={isEditSuccess} onClose={onClose} />}
+            {isEditSuccess
+                && <SuccessPopup
+                    isEditSuccess={isEditSuccess}
+                    onClose={onClose}
+                    successText="Данные пользователя обновлены!"
+                />}
         </section>
     );
 };

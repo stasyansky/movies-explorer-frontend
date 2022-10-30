@@ -5,6 +5,7 @@ import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import MoreFilmsButton from "../MoreFilmsButton/MoreFilmsButton";
 import WithoutFoundResult from "../WithoutFoundResult/WithoutFoundResult";
 import Preloader from "../Preloader/Preloader";
+import SuccessPopup from "../SuccessPopup/SuccessPopup";
 
 const Movies = ({
     handleSearchMovies,
@@ -24,6 +25,8 @@ const Movies = ({
     filmsOnRow,
     countAddRows,
     handleMoreFilmsClick,
+    isErrorPostMovie,
+    onClose
 }) => {
 
     return (
@@ -58,6 +61,11 @@ const Movies = ({
             {
                 isLoading && <Preloader />
             }
+            {isErrorPostMovie
+                && <SuccessPopup
+                    onClose={onClose}
+                    isErrorPostMovie={isErrorPostMovie}
+                    errorText="При сохранинии фильма произошла ошибка!"/>}
         </section>
     );
 };
