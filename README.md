@@ -3,8 +3,8 @@
 
 ***
 ## Ссылки
-* [Фронтенд проекта `Movies-explorer`](https://movies2explorer.nomoredomains.sbs)
-* [Бэкенд проекта `Movies-explorer`](https://api.movies2explorer.nomoredomains.sbs)
+* [Фронтенд проекта `Movies-explorer`](http://movies2explorer.nomoredomains.sbs/)
+* [Бэкенд проекта `Movies-explorer`](https://api.movies2explorer.nomoredomains.sbs/)
 * [Ссылка на макет`Яндекс диск`](https://disk.yandex.ru/d/XR03PlXlNZBvhA)
 ***
 * IP-адрес сервера: `51.250.92.253`
