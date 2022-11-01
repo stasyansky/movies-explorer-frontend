@@ -6,7 +6,6 @@ import MoviesCard from "../MoviesCard/MoviesCard";
 const MoviesCardList = ({
     searchedMovies,
     onMovieSaved,
-    searchedSavedMovies,
     onMovieDelete,
     savedMovies,
     filmsOnRow,
@@ -36,7 +35,7 @@ const MoviesCardList = ({
             }
             {
                 location.pathname === '/saved-movies'
-                && searchedSavedMovies
+                && savedMovies
                     .slice(0, (countAddRows * filmsOnRow))
                     .map(savedMovie => (
                         <MoviesCard

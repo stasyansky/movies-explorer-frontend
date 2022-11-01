@@ -28,14 +28,14 @@ const SearchForm = ({
             path === 'movies' ?
                 setIsChecked({...isChecked, checkedOnMovies: toggleCheckbox})
             :
-                setIsChecked({...isChecked, checkedOnSavedMovies: toggleCheckbox});
+                setIsChecked({...isChecked, checkedOnSavedMovies: false});
         }
         const query = localStorage.getItem(`searchQuery-${path}`);
         if (query) {
             path === 'movies' ?
                 setSearchQuery({...searchQuery, searchQueryOnMovies: query})
             :
-                setSearchQuery({...searchQuery, searchQueryOnSavedMovies: query})
+                setSearchQuery({...searchQuery, searchQueryOnSavedMovies: ''})
         }
     },[]);
 

@@ -32,7 +32,14 @@ function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [isFirstLogin, setIsFirstLogin] = React.useState(false);
     const [errorLogin, setErrorLogin] = useState(false);
-    const [currentUser, setCurrentUser] = useState({});
+    const [currentUser, setCurrentUser] = useState(() => {
+        const storageData = localStorage.getItem('userData');
+        return storageData ? JSON.parse(storageData) : {};
+    });
+    const [url, setUrl] = useState(() => {
+        const storageData = localStorage.getItem('currentUrl');
+        return storageData ? storageData : '';
+    });
     const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
     const [isEditSuccess, setIsEditSuccess] = useState(false);
     const [isErrorPostMovie, setIsErrorPostMovie] = useState(false);
@@ -43,11 +50,10 @@ function App() {
         const storageData = localStorage.getItem('searchedMovies-movies');
         return storageData ? JSON.parse(storageData) : [];
     });
-    const [searchedSavedMovies, setSearchedSavedMovies] = useState(() => {
-        const storageData = localStorage.getItem('searchedMovies-savedmovies');
+    const [savedMovies, setSavedMovies] = useState(() => {
+        const storageData = localStorage.getItem('savedMovies');
         return storageData ? JSON.parse(storageData) : [];
     });
-    const [savedMovies, setSavedMovies] = useState([]);
     const [isChecked, setIsChecked] = useState(
         {checkedOnMovies: false, checkedOnSavedMovies: false}
     );
@@ -71,6 +77,13 @@ function App() {
     const desktop = windowSize.width > 1023;
 
     useEffect(() => {
+        setTimeout(() => {
+            localStorage.setItem("currentUrl", location.pathname);
+        },1000);
+        setUrl(localStorage.getItem('currentUrl'));
+    },[location.pathname]);
+
+    useEffect(() => {
         if(loggedIn && isFirstLogin) {
             setIsFirstLogin(!isFirstLogin);
             mainApi.getUserInfo()
@@ -82,9 +95,7 @@ function App() {
             mainApi.getSavedMovies()
                 .then((movies) => {
                     setSavedMovies(movies);
-                    setSearchedSavedMovies(movies);
                     localStorage.setItem('savedMovies', JSON.stringify(movies));
-                    localStorage.setItem('searchedMovies-savedmovies', JSON.stringify(movies));
                 })
                 .catch(err => console.error(err));
         }
@@ -102,22 +113,11 @@ function App() {
                     navigate(location.pathname);
                 }
             })
-            .catch(err => console.error(err));
+            .catch((err) => {
+                console.error(err);
+                handleSignOut();
+            });
     },[]);
-
-    useEffect(() => {
-        if(loggedIn && !isFirstLogin) {
-            localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
-            localStorage.setItem('searchedMovies-savedmovies', JSON.stringify(searchedSavedMovies));
-        }
-    }, [searchedSavedMovies, savedMovies]);
-
-    useEffect(() => {
-        if(loggedIn && !isFirstLogin) {
-            setSavedMovies(JSON.parse(localStorage.getItem('savedMovies')));
-            setSearchedSavedMovies(JSON.parse(localStorage.getItem('searchedMovies-savedmovies')));
-        }
-    }, [navigate]);
 
     useEffect(() => {
         if (location.pathname === '/movies' || location.pathname === '/saved-movies') {
@@ -196,16 +196,15 @@ function App() {
         mainApi.setNewToken();
         setCurrentUser({});
         setSearchedMovies([]);
-        setIsChecked({checkedOnMovies: false, checkedOnSavedMovies: false});
-        setErrorPlaceholder({errorPlaceholderOnMovies: false, errorPlaceholderOnSavedMovies: false});
-        setSearchQuery({searchQueryOnMovies: '', searchQueryOnSavedMovies: ''});
         navigate('/');
     }
 
     function handleEditProfile({ name, email }) {
         mainApi.editUserInfo({ name, email })
             .then((userInfo) => {
-                setCurrentUser(userInfo);
+                flushSync(() => {
+                    setCurrentUser(userInfo);
+                });
                 localStorage.setItem('userData', JSON.stringify(userInfo));
                 setIsEditSuccess(true);
             })
@@ -219,7 +218,7 @@ function App() {
                     ||
                     (item.nameEN.toLowerCase().includes(query.toLowerCase()) && item.duration <= SHORTMOVIE);
             });
-            path === 'movies' ? setSearchedMovies(searchMovies) : setSearchedSavedMovies(searchMovies);
+            path === 'movies' ? setSearchedMovies(searchMovies) : setSavedMovies(searchMovies);
             localStorage.setItem(`searchedMovies-${path}`, JSON.stringify(searchMovies) || []);
         } else {
             const searchMovies = movies.filter(item => {
@@ -227,7 +226,7 @@ function App() {
                     ||
                     item.nameEN.toLowerCase().includes(query.toLowerCase());
             });
-            path === 'movies' ? setSearchedMovies(searchMovies) : setSearchedSavedMovies(searchMovies);
+            path === 'movies' ? setSearchedMovies(searchMovies) : setSavedMovies(searchMovies);
             localStorage.setItem(`searchedMovies-${path}`, JSON.stringify(searchMovies) || []);
         }
         setTimeout(() => setIsLoading(false), 500);
@@ -301,9 +300,10 @@ function App() {
         mainApi.postSavedMovie(movie)
             .then((savedMovie) => {
                 flushSync(() => {
-                    setSearchedSavedMovies(prevState => [...prevState, savedMovie]);
                     setSavedMovies([...savedMovies, savedMovie]);
                 });
+                const moviesArr = JSON.parse(localStorage.getItem('savedMovies'));
+                localStorage.setItem('savedMovies', JSON.stringify([...moviesArr, savedMovie]));
             })
             .catch((err) => {
                 console.error(err);
@@ -317,8 +317,9 @@ function App() {
             .then(() => {
                 flushSync(() => {
                     setSavedMovies(prevState => prevState.filter(m => m._id !== _id));
-                    setSearchedSavedMovies(prevState => prevState.filter(m => m._id !== _id));
                 });
+                const moviesArr = JSON.parse(localStorage.getItem('savedMovies'));
+                localStorage.setItem('savedMovies', JSON.stringify(moviesArr.filter(m => m._id !== _id)));
             })
             .catch((err) => console.error(err));
     }
@@ -326,7 +327,7 @@ function App() {
   return (
       <CurrentUserContext.Provider value={currentUser}>
         <div className="page">
-            {pageWithHeader && <Header menuOpen={handleMenuOpen} desktop={desktop} />}
+            {pageWithHeader && <Header menuOpen={handleMenuOpen} desktop={desktop} loggedIn={loggedIn} />}
             <main className="main">
                 <Routes>
                     <Route path='/' element={<Main />} />
@@ -344,8 +345,7 @@ function App() {
                             isEditSuccess={isEditSuccess}
                             onClose={popupSuccessClose}
                             setIsEditSuccess={setIsEditSuccess}
-                            handleEditProfile={handleEditProfile}
-                            setCurrentUser={setCurrentUser} />}
+                            handleEditProfile={handleEditProfile} />}
                         />
                         <Route path='movies' element={<Movies
                             filmsOnRow={filmsOnRow}
@@ -375,8 +375,7 @@ function App() {
                             handleSearchSavedMovies={handleSearchSavedMovies}
                             onMovieDelete={handleMovieDelete}
                             savedMovies={savedMovies}
-                            searchedSavedMovies={searchedSavedMovies}
-                            setSearchedSavedMovies={setSearchedSavedMovies}
+                            setSavedMovies={setSavedMovies}
                             isLoading={isLoading}
                             isChecked={isChecked}
                             setIsChecked={setIsChecked}
@@ -388,14 +387,11 @@ function App() {
                             isErrorOnServer={isErrorOnServer} />}
                         />
                     </Route>
-                    <Route path="*" element={<NotFoundPage />} />
+                    <Route path="*" element={<NotFoundPage path={url} />} />
                 </Routes>
             </main>
             {pageWithFooter && <Footer/>}
-            <MenuBurgerPopup
-                isOpen={isBurgerMenuOpen}
-                onClose={handleMenuClose}
-            />
+            <MenuBurgerPopup isOpen={isBurgerMenuOpen} onClose={handleMenuClose} />
         </div>
       </CurrentUserContext.Provider>
   );

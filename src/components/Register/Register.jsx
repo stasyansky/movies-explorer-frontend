@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Link } from "react-router-dom";
 import LogoNav from "../LogoNav/LogoNav";
 import './Register.css';
+import { PATTERN_EMAIL, PATTERN_NAME } from '../../utils/constants';
 
 const Register = ({ errorRegister, handleSignUp }) => {
 
@@ -51,7 +52,7 @@ const Register = ({ errorRegister, handleSignUp }) => {
                                     message: "Минимум 2 символа"
                                 },
                                 pattern: {
-                                    value: /[A-Za-zА-Яа-яЁё\s-]+/,
+                                    value: PATTERN_NAME,
                                     message: 'Введите корректное имя'
                                 }
                             })}
@@ -73,7 +74,7 @@ const Register = ({ errorRegister, handleSignUp }) => {
                             {...register("email", {
                                 required: "Поле не должно быть пустым",
                                 pattern: {
-                                    value: /^([A-Za-z0-9\._]+)@([A-Za-z0-9])+.([a-z]+)(.[a-z]+)?$/,
+                                    value: PATTERN_EMAIL,
                                     message: 'Введите корректный email'
                                 }
                             })}

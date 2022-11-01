@@ -1,36 +1,36 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './Profile.css';
 import SuccessPopup from "../SuccessPopup/SuccessPopup";
+import { PATTERN_EMAIL, PATTERN_NAME } from '../../utils/constants';
 
 const Profile = ({
     handleSignOut,
     handleEditProfile,
-    setCurrentUser,
     isEditSuccess,
     onClose
 }) => {
 
     const currentUser = useContext(CurrentUserContext);
-    useEffect(() => {
-        setCurrentUser(JSON.parse(localStorage.getItem('userData')));
-    },[]);
+
     const {
         register,
         handleSubmit,
-        formState: { errors, isValid },
+        formState: { errors, isValid, isDirty },
+        reset,
     } = useForm({
         mode: "onChange",
         defaultValues: {
-            nameUser: '',
-            emailUser: currentUser.email
+            nameUser: currentUser.name,
+            emailUser: currentUser.email,
         }
     });
 
     const onSubmit = (data) => {
         const { nameUser: name, emailUser: email } = data;
         handleEditProfile({ name, email });
+        reset({nameUser: name, emailUser: email });
     };
 
     return (
@@ -44,7 +44,6 @@ const Profile = ({
                             type="text"
                             id="username"
                             className="profile__input"
-                            placeholder={currentUser.name}
                             {...register("nameUser", {
                                 required: "Поле не должно быть пустым",
                                 minLength: {
@@ -52,9 +51,9 @@ const Profile = ({
                                     message: "Минимум 2 символа"
                                 },
                                 pattern: {
-                                    value: /[A-Za-zА-Яа-яЁё\s-]+/,
+                                    value: PATTERN_NAME,
                                     message: 'Введите корректное имя'
-                                }
+                                },
                             })}
                         />
                     </div>
@@ -70,13 +69,12 @@ const Profile = ({
                             id="usermail"
                             name="inputEmail"
                             className="profile__input"
-                            placeholder={currentUser.email}
                             {...register("emailUser", {
                                 required: "Поле не должно быть пустым",
                                 pattern: {
-                                    value: /^([A-Za-z0-9\._]+)@([A-Za-z0-9])+.([a-z]+)(.[a-z]+)?$/,
+                                    value: PATTERN_EMAIL,
                                     message: 'Введите корректный email'
-                                }
+                                },
                             })}
                         />
                     </div>
@@ -85,7 +83,11 @@ const Profile = ({
                             {errors?.emailUser?.message || "Введите корректный email"}
                         </p>
                     }
-                    <button className="profile__form_btn" type="submit" disabled={!isValid}>
+                    <button
+                        className="profile__form_btn"
+                        type="submit"
+                        disabled={!isValid || !isDirty}
+                    >
                         Редактировать
                     </button>
                 </form>

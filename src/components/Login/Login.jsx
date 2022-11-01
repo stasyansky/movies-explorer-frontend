@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Link } from "react-router-dom";
 import LogoNav from "../LogoNav/LogoNav";
 import './Login.css';
+import { PATTERN_EMAIL } from '../../utils/constants';
 
 const Login = ({ errorLogin, handleSignIn }) => {
 
@@ -46,7 +47,7 @@ const Login = ({ errorLogin, handleSignIn }) => {
                             {...register("email", {
                                 required: "Поле не должно быть пустым",
                                 pattern: {
-                                    value: /^([A-Za-z0-9\._]+)@([A-Za-z0-9])+.([a-z]+)(.[a-z]+)?$/,
+                                    value: PATTERN_EMAIL,
                                     message: 'Введите корректный email'
                                 }
                             })}

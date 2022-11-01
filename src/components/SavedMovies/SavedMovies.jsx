@@ -10,8 +10,7 @@ const SavedMovies = ({
     handleSearchSavedMovies,
     onMovieDelete,
     savedMovies,
-    searchedSavedMovies,
-    setSearchedSavedMovies,
+    setSavedMovies,
     isLoading,
     isChecked,
     setIsChecked,
@@ -28,21 +27,8 @@ const SavedMovies = ({
 
     useEffect(() => {
         const savedMoviesArr = JSON.parse(localStorage.getItem('savedMovies'));
-        const searchedSavedMoviesArr = JSON.parse(localStorage.getItem('searchedMovies-savedmovies'));
-        if (searchedSavedMoviesArr) {
-            if (searchedSavedMoviesArr.length === 0) {
-                return setSearchedSavedMovies(savedMoviesArr);
-            } else {
-                return setSearchedSavedMovies(searchedSavedMoviesArr)
-            }
-        } else {
-            setSearchedSavedMovies(savedMoviesArr);
-        }
+        setSavedMovies(savedMoviesArr);
     }, []);
-
-    useEffect(() => {
-        localStorage.setItem('searchedMovies-savedmovies', JSON.stringify(searchedSavedMovies));
-    }, [searchedSavedMovies]);
 
     return (
         <section className="saved-movies">
@@ -58,17 +44,16 @@ const SavedMovies = ({
             />
             {isErrorOnServer && <WithoutFoundResult isErrorOnServer={isErrorOnServer} />}
             {
-                (searchedSavedMovies.length === 0 && !isErrorOnServer)
+                (savedMovies.length === 0 && !isErrorOnServer)
                 ? <WithoutFoundResult />
                 : <>
                     <MoviesCardList
-                        searchedSavedMovies={searchedSavedMovies}
-                        onMovieDelete={onMovieDelete}
                         savedMovies={savedMovies}
+                        onMovieDelete={onMovieDelete}
                         filmsOnRow={filmsOnRow}
                         countAddRows={countAddRows}
                     />
-                    {filmsOnRow * countAddRows < searchedSavedMovies.length
+                    {filmsOnRow * countAddRows < savedMovies.length
                         && <MoreFilmsButton handleMoreFilmsClick={handleMoreFilmsClick}/>
                     }
                   </>
