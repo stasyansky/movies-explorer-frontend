@@ -1,7 +1,7 @@
 .movies__list {
     list-style-type: none;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 339px));
+    grid-template-columns: repeat(auto-fill, 300px);
     justify-content: center;
     gap: 20px;
     padding: 0;
@@ -10,12 +10,13 @@
 
 @media screen and (min-width: 768px) {
     .movies__list {
+        grid-template-columns: repeat(auto-fill, 339px);
         row-gap: 36px;
         column-gap: 30px;
     }
 }
 
-@media screen and (min-width: 1280px) {
+@media screen and (min-width: 1024px) {
     .movies__list {
         grid-template-columns: repeat(auto-fill, 270px);
         row-gap: 32px;

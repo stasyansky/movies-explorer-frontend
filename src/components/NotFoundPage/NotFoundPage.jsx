@@ -2,9 +2,9 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 import './NotFoundPage.css';
 
-const NotFoundPage = () => {
+const NotFoundPage = ({ path }) => {
     const navigate = useNavigate();
-    const handleGoBack = () => navigate(-1);
+    const handleGoBack = () => navigate(path);
 
     return (
         <section className="error__page">

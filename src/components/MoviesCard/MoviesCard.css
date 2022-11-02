@@ -7,6 +7,7 @@
 }
 .movie__pic {
     min-width: 100%;
+    max-width: 100%;
     min-height: 168px;
     max-height: 168px;
     background: #555;
@@ -28,6 +29,10 @@
     line-height: 1.2;
     color: #FFFFFF;
     margin: 0;
+    width: 229px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .movie_duration {
     margin: 0;
@@ -45,6 +50,7 @@
     box-sizing: border-box;
     background-color: #313131;
     padding: 0;
+    cursor: pointer;
 }
 .movie__like_active {
     background-color: #2BE080;
@@ -57,4 +63,5 @@
     box-sizing: border-box;
     background: #222 url("../../images/delete-like-film.svg") no-repeat center center;
     border: none;
+    cursor: pointer;
 }

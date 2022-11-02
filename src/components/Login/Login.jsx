@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
-import './Login.css';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { Link } from "react-router-dom";
 import LogoNav from "../LogoNav/LogoNav";
-import { Link, useNavigate } from "react-router-dom";
+import './Login.css';
+import { PATTERN_EMAIL } from '../../utils/constants';
 
-const Login = ({ errorLogin }) => {
-    const [email, setEmail] = useState('pochta@yandex.ru');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
+const Login = ({ errorLogin, handleSignIn }) => {
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        setEmail('');
-        setPassword('');
-        navigate('/movies', { replace: true });
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors, isValid },
+    } = useForm({
+        mode: "onChange",
+        defaultValues: {
+            email: '',
+            password: ''
+        }
+    });
+
+    const onSubmit = (data) => {
+        const { email, password } = data;
+        handleSignIn({
+            email,
+            password,
+        });
+        reset();
     }
 
     return (
@@ -22,37 +36,42 @@ const Login = ({ errorLogin }) => {
                     <LogoNav />
                     <p className="login__title">Рады видеть!</p>
                 </div>
-                <form className="login__form" onSubmit={handleSubmit}>
+                <form className="login__form" onSubmit={handleSubmit(onSubmit)}>
                     <div className="login__field">
                         <label htmlFor="useremail" className="login__label">E-mail</label>
                         <input
                             type="email"
                             id="useremail"
-                            name="inputEmail"
                             className={`login__input ${errorLogin ? "login__input_error" : ""}`}
-                            placeholder={email}
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                            required
-                            autoComplete="off"
+                            placeholder="Введите email"
+                            {...register("email", {
+                                required: "Поле не должно быть пустым",
+                                pattern: {
+                                    value: PATTERN_EMAIL,
+                                    message: 'Введите корректный email'
+                                }
+                            })}
                         />
+                        {errors?.email
+                            && <p className="profile__input_error">
+                                {errors?.email?.message || "Введите корректный email"}
+                            </p>
+                        }
                     </div>
                     <div className="login__field">
                         <label htmlFor="userpass" className="login__label">Пароль</label>
                         <input
                             type="password"
                             id="userpass"
-                            name="inputPass"
                             className={`login__input ${errorLogin ? "login__input_error" : ""}`}
-                            placeholder=""
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
-                            required
-                            autoComplete="off"
+                            placeholder="Введите пароль"
+                            {...register("password", {
+                                required: "Поле не должно быть пустым",
+                            })}
                         />
                     </div>
                     <p className={`login__error ${errorLogin ? "login__error_visible" : ""}`}>Что-то пошло не так...</p>
-                    <button className="login__form_btn" type="submit">
+                    <button className="login__form_btn" type="submit" disabled={!isValid}>
                         Войти
                     </button>
                 </form>

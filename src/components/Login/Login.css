@@ -71,6 +71,9 @@
     padding: 15px 0;
     border: none;
 }
+.login__form_btn:disabled {
+    opacity: .7;
+}
 .login__footer {
     display: flex;
     justify-content: center;

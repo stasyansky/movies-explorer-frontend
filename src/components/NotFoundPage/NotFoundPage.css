@@ -33,10 +33,10 @@
     line-height: 1.25;
     text-align: center;
     color: #4285F4;
-}
-.error__page_back {
     cursor: pointer;
+    text-decoration: none;
 }
+
 @media screen and (min-width: 768px) {
     .error__page {
         justify-content: center;
